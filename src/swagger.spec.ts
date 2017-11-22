@@ -570,5 +570,27 @@ describe('swagger2', () => {
         });
       });
     });
+
+    describe('parsed path parameter validation', () => {
+      it('/api/pets/dog/short should match { breed: "dog", fur: "short" }', () => {
+        const compiledPath = compile('test/yaml/parameters.yaml')('/api/pets/dog/short');
+        assert.deepStrictEqual(swagger.validateRequest(compiledPath, 'get', undefined, undefined, undefined, {
+          breed: 'dog',
+          fur: 'short'
+        }), []);
+      });
+
+      it('/api/pets/dog/short should not match { breed: "dog" }', () => {
+        const compiledPath = compile('test/yaml/parameters.yaml')('/api/pets/dog/short');
+        assert.deepStrictEqual(swagger.validateRequest(compiledPath, 'get', undefined, undefined, undefined, {
+          breed: 'dog'
+        }), [{
+          actual: undefined,
+          error: 'data is the wrong type',
+          expected: { type: 'string' },
+          where: 'path'
+        }]);
+      });
+    });
   });
 });
