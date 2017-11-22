@@ -141,12 +141,9 @@ export function request(compiledPath: CompiledPath | undefined,
         value = (query || {})[parameter.name];
         break;
       case 'path':
-        if (pathParameters)
-        {
+        if (pathParameters) {
           value = pathParameters[parameter.name];
-        }
-        else
-        {
+        } else {
           const actual = compiledPath.name.match(/[^\/]+/g);
           const valueIndex = compiledPath.expected.indexOf('{' + parameter.name + '}');
           value = actual ? actual[valueIndex] : undefined;
